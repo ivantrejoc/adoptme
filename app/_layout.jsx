@@ -1,7 +1,6 @@
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { View, Text } from "react-native";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
-import { tokenCache } from "../utils/tokenCache";
 
 export default function RootLayout() {
   const [fontsLoaded, error] = useFonts({
@@ -17,26 +16,20 @@ export default function RootLayout() {
       </View>
     );
   }
-
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
   return (
-    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
-      <Stack>
-        <Stack.Screen name="index" />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            headerShown: false
-          }}
-        />
-        <Stack.Screen
-          name="login/index"
-          options={{
-            headerShown: false
-          }}
-        />
-      </Stack>
-    </ClerkProvider>
+    <Stack initialRouteName="(tabs)">
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false
+        }}
+      />
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false
+        }}
+      />
+    </Stack>
   );
 }

@@ -10,25 +10,25 @@ import colors from "../../constants/colors";
 WebBrowser.maybeCompleteAuthSession();
 
 export default function index() {
-  useWarmUpBrowser();
+  // useWarmUpBrowser();
 
-  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+  // const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
-  const onPress = useCallback(async () => {
-    try {
-      const { createdSessionId, signIn, signUp, setActive } =
-        await startOAuthFlow({
-          redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "adoptme" })
-        });
-
-      if (createdSessionId) {
-      } else {
-        // Use signIn or signUp for next steps such as MFA
-      }
-    } catch (err) {
-      console.error("OAuth error", err);
-    }
-  }, []);
+  // const onPress = useCallback(async () => {
+  //   try {
+  //     const { createdSessionId, signIn, signUp, setActive } =
+  //       await startOAuthFlow({
+  //         redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "adoptme" })
+  //       });
+  //       console.log("startOAuthFlow called");
+  //     if (createdSessionId) {
+  //     } else {
+  //       // Use signIn or signUp for next steps such as MFA
+  //     }
+  //   } catch (err) {
+  //     console.error("OAuth error", err);
+  //   }
+  // }, []);
 
   return (
     <View style={styles.container}>
@@ -41,9 +41,12 @@ export default function index() {
         <Text style={styles.caption}>
           Let's adopt the pet which you like and make there life happy again
         </Text>
-        <Pressable style={styles.button} onPress={onPress}>
+        <Link href={"/(tabs)/home"} style={styles.button}>
           <Text style={styles.buttonText}>Get Started</Text>
-        </Pressable>
+        </Link>
+        {/* <Pressable style={styles.button} onPress={onPress}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </Pressable> */}
       </View>
     </View>
   );

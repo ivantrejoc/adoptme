@@ -1,29 +1,69 @@
-import { Text, View, StyleSheet } from "react-native";
-import { Link, Redirect } from "expo-router";
-import { useUser } from "@clerk/clerk-expo";
+import { View, Image, Text, Pressable, StyleSheet } from "react-native";
+import { Link } from "expo-router";
+import colors from "../constants/colors";
 
-export default function Index() {
-  const { user } = useUser();
-
-  return user&&(
-        <View style={styles.container}>
-          <Text>{user?.fullName}</Text>
-      {user ?
-      <Redirect href={"/(tabs)/home"} />
-      : <Redirect href={"/login"} />  
-    }
+export default function index() {
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require("../assets/images/adopt-dog.png")}
+        style={styles.image}
+      />
+      <View style={styles.legendCont}>
+        <Text style={styles.legend}>Ready to make a new friend?</Text>
+        <Text style={styles.caption}>
+          Let's adopt the pet which you like and make there life happy again
+        </Text>
+        <Link href={"/(tabs)/home"} style={styles.button}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </Link>
+        {/* <Pressable style={styles.button} onPress={onPress}>
+          <Text style={styles.buttonText}>Get Started</Text>
+        </Pressable> */}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    backgroundColor: colors.WHITE,
+    flex: 1
+  },
+  image: {
+    width: "100%",
+    height: 500
+  },
+  legendCont: {
+    padding: 20,
+    display: "flex",
     justifyContent: "center",
     alignItems: "center"
   },
-  title: {
+  legend: {
+    fontFamily: "lato-bold",
+    fontSize: 30,
+    textAlign: "center",
+    marginBottom: 20
+  },
+  caption: {
     fontFamily: "lato",
-    fontSize: 20
+    fontSize: 18,
+    textAlign: "center",
+    color: colors.GRAY
+  },
+  button: {
+    padding: 14,
+    marginTop: 100,
+    backgroundColor: colors.PRIMARY,
+    width: "100%",
+    borderRadius: 14,
+    textAlign: "center"
+  },
+  buttonText: {
+    fontFamily: "lato",
+    fontSize: 20,
+    fontWeight: "600",
+    textAlign: "center"
   }
 });
