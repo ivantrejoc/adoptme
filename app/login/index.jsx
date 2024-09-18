@@ -1,7 +1,35 @@
+import { useCallback } from "react";
+import * as WebBrowser from "expo-web-browser";
+import { useWarmUpBrowser } from "../../hooks/WarmUpBrowser";
+import { Link } from "expo-router";
+import { useOAuth } from "@clerk/clerk-expo";
+import * as Linking from "expo-linking";
 import { View, Image, Text, Pressable, StyleSheet } from "react-native";
 import colors from "../../constants/colors";
 
+WebBrowser.maybeCompleteAuthSession();
+
 export default function index() {
+  useWarmUpBrowser();
+
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+
+  const onPress = useCallback(async () => {
+    try {
+      const { createdSessionId, signIn, signUp, setActive } =
+        await startOAuthFlow({
+          redirectUrl: Linking.createURL("/home", { scheme: "adoptme" })
+        });
+
+      if (createdSessionId) {
+      } else {
+        // Use signIn or signUp for next steps such as MFA
+      }
+    } catch (err) {
+      console.error("OAuth error", err);
+    }
+  }, []);
+
   return (
     <View style={styles.container}>
       <Image
@@ -13,7 +41,7 @@ export default function index() {
         <Text style={styles.caption}>
           Let's adopt the pet which you like and make there life happy again
         </Text>
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={onPress}>
           <Text style={styles.buttonText}>Get Started</Text>
         </Pressable>
       </View>

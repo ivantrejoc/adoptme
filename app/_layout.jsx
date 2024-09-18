@@ -1,5 +1,7 @@
+import { ClerkProvider } from "@clerk/clerk-expo";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
+import { tokenCache } from "../utils/tokenCache";
 
 export default function RootLayout() {
   useFonts({
@@ -7,15 +9,21 @@ export default function RootLayout() {
     "lato-thin": require("./../assets/fonts/Lato-Thin.ttf"),
     "lato-bold": require("./../assets/fonts/Lato-Bold.ttf")
   });
+
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
   return (
-    <Stack>
-      {/* <Stack.Screen name="index" /> */}
-      <Stack.Screen
-        name="login/index"
-        options={{
-          headerShown: false
-        }}
-      />
-    </Stack>
+    <ClerkProvider tokenCache={tokenCache} publishableKey={publishableKey}>
+      <Stack>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="home" />
+        <Stack.Screen
+          name="login/index"
+          options={{
+            headerShown: false
+          }}
+        />
+      </Stack>
+    </ClerkProvider>
   );
 }
