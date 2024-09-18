@@ -5,8 +5,9 @@ import { useUser } from "@clerk/clerk-expo";
 export default function Index() {
   const { user } = useUser();
 
-  return (
-    <View style={styles.container}>
+  return user&&(
+        <View style={styles.container}>
+          <Text>{user?.fullName}</Text>
       {user ?
       <Redirect href={"/(tabs)/home"} />
       : <Redirect href={"/login"} />  
