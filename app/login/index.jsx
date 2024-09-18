@@ -18,7 +18,7 @@ export default function index() {
     try {
       const { createdSessionId, signIn, signUp, setActive } =
         await startOAuthFlow({
-          redirectUrl: Linking.createURL("/home", { scheme: "adoptme" })
+          redirectUrl: Linking.createURL("/(tabs)/home", { scheme: "adoptme" })
         });
 
       if (createdSessionId) {
