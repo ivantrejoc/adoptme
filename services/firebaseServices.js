@@ -28,7 +28,6 @@ export const getCategories = async () => {
       id: doc.id,
       ...doc.data()
     }));
-    console.log("CATEGORIES WITHIN SERVICE: ", categories);
     return categories;
   } catch (error) {
     console.error(error);
