@@ -26,12 +26,9 @@ export default function Slider() {
     fetchSliders();
   }, []);
 
-  console.log("SLIDERS WITHIN COMPONENT: ", slidersData);
-
   return (
     <View style={styles.container}>
       <FlatList
-        style={styles.list}
         data={slidersData}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -45,12 +42,16 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 15
   },
-  list: {},
-  sliderContainer: {},
+  sliderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
   image: {
     width: Dimensions.get("screen").width * 0.9,
     height: 180,
+    resizeMode: "stretch",
     borderRadius: 20,
-    marginRight: 15
+    marginRight: 10
   }
 });

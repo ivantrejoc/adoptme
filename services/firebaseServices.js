@@ -17,3 +17,21 @@ export const getSliders = async () => {
     return error.message;
   }
 };
+
+export const getCategories = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(db, "categories"));
+    if (!querySnapshot) {
+      throw new Error("Something went wrong", error);
+    }
+    const categories = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    console.log("CATEGORIES WITHIN SERVICE: ", categories);
+    return categories;
+  } catch (error) {
+    console.error(error);
+    return error.message;
+  }
+};
