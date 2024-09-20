@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
 export const getSliders = async () => {
@@ -21,6 +21,27 @@ export const getSliders = async () => {
 export const getCategories = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, "categories"));
+    if (!querySnapshot) {
+      throw new Error("Something went wrong", error);
+    }
+    const categories = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    return categories;
+  } catch (error) {
+    console.error(error);
+    return error.message;
+  }
+};
+
+export const getPetsByCategory = async (category) => {
+  try {
+    const queryPets = await query(
+      collection(db, "pets"),
+      where("category", "==", category)
+    );
+    const querySnapshot = await getDocs(queryPets);
     if (!querySnapshot) {
       throw new Error("Something went wrong", error);
     }

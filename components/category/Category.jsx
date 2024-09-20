@@ -10,7 +10,7 @@ import {
 import colors from "../../constants/colors";
 import { getCategories } from "../../services/firebaseServices";
 
-export default function Category() {
+export default function Category({ onCategorySelected }) {
   const [categoriesList, setCategoriesList] = useState([]);
   const [isSelected, setIsSelected] = useState("Dogs");
 
@@ -28,7 +28,8 @@ export default function Category() {
   }, []);
 
   const handleSelectCategory = (category) => {
-    return setIsSelected(category);
+    setIsSelected(category);
+    onCategorySelected(category);
   };
 
   return (
