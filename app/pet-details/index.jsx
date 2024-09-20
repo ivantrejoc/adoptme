@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import PetInfo from "../../components/petInfo/PetInfo";
 import PetSubInfo from "../../components/petInfo/PetSubInfo";
+import AboutPet from "../../components/petInfo/AboutPet";
 
 export default function PetDetails() {
   const navigation = useNavigation();
@@ -18,8 +19,11 @@ export default function PetDetails() {
 
   return (
     <View style={styles.container}>
-      <PetInfo image={image} name={name} age={age} breed={breed} />
-      <PetSubInfo age={age} breed={breed} />
+      <ScrollView style={styles.scrollView}>
+        <PetInfo image={image} name={name} age={age} breed={breed} />
+        <PetSubInfo age={age} breed={breed} />
+        <AboutPet name={name} />
+      </ScrollView>
     </View>
   );
 }
