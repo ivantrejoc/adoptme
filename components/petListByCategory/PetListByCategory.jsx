@@ -7,15 +7,16 @@ import { getPetsByCategory } from "../../services/firebaseServices";
 export default function PetListByCategory() {
   const [categorySelected, setCategorySelected] = useState("Dogs");
   const [petsByCategory, setPetsByCategory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loader, setLoader] = useState(true);
+
+  const fetchFilteredPets = async (categorySelected) => {
+    const data = await getPetsByCategory(categorySelected);
+    setPetsByCategory(data);
+    setLoader(false);
+  };
 
   useEffect(() => {
     if (categorySelected) {
-      const fetchFilteredPets = async (categorySelected) => {
-        const data = await getPetsByCategory(categorySelected);
-        setPetsByCategory(data);
-        setLoading(false);
-      };
       fetchFilteredPets(categorySelected);
     }
   }, [categorySelected]);
@@ -28,11 +29,11 @@ export default function PetListByCategory() {
     <View style={styles.container}>
       <Category onCategorySelected={handleCategorySelected} />
       <FlatList
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 30 }}
         data={petsByCategory}
         horizontal={true}
-        refreshing={loading}
-        onRefresh={() => getPetsByCategory(categorySelected)}
+        refreshing={loader}
+        onRefresh={() => fetchFilteredPets(categorySelected)}
         renderItem={({ item }) => (
           <PetCard
             key={item.id}

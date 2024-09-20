@@ -40,7 +40,7 @@ export default function Slider() {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 15
+    marginTop: 25
   },
   sliderContainer: {
     flex: 1,

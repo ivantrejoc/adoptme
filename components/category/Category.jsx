@@ -36,6 +36,7 @@ export default function Category({ onCategorySelected }) {
     <View style={styles.container}>
       <Text style={styles.title}>Category</Text>
       <FlatList
+        marginTop={5}
         data={categoriesList}
         numColumns={4}
         renderItem={({ item, index }) => (
@@ -62,7 +63,7 @@ export default function Category({ onCategorySelected }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20
+    marginTop: 25
   },
   title: {
     fontFamily: "lato",
