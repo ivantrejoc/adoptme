@@ -19,7 +19,7 @@ export default function PetInfo({ name, age, breed, image }) {
 }
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    
   },
   image: {
     width: "100%",
