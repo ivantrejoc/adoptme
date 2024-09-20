@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
-import colors from "../../constants/colors";
 import { useState } from "react";
+import colors from "../../constants/colors";
+import { StyleSheet, Text, View, Pressable } from "react-native";
+import OwnerInfo from "./OwnerInfo";
 
 export default function AboutPet({ name }) {
   const [readMore, SetReadMore] = useState(true);
@@ -36,6 +37,7 @@ export default function AboutPet({ name }) {
           <Text style={styles.textBtn}>Read Less</Text>
         </Pressable>
       )}
+      <OwnerInfo />
     </View>
   );
 }
