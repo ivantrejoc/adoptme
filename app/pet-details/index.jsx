@@ -1,9 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native'
-export default function index() {
+import { useEffect } from "react";
+import { useLocalSearchParams, useNavigation } from "expo-router";
+import { StyleSheet, Text, View } from "react-native";
+import PetInfo from "../../components/petInfo/PetInfo";
+
+export default function PetDetails() {
+  const navigation = useNavigation();
+  const searchParams = useLocalSearchParams();
+  const { name, age, breed, image } = searchParams;
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTransparent: true,
+      headerTitle: ""
+    });
+  }, []);
+
   return (
-    <View>
-      <Text>index</Text>
+    <View style={styles.container}>
+      <PetInfo image={image} name={name} age={age} breed={breed} />
     </View>
-  )
+  );
 }
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+});
