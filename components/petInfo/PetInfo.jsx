@@ -46,8 +46,7 @@ export default function PetInfo({ image, name, age, breed }) {
       console.error(error);
     }
   };
-
-  console.log("FAVORITES: ", favorites);
+  
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: image }} />

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   block: {
-    height: 70
+    height: 90
   },
   buttonContainer: {
     position: "absolute",
