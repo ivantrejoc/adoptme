@@ -98,8 +98,15 @@ export const updateUserFavorites = async (data) => {
     }
     const docRef = querySnapshot.docs[0].ref;
 
+    const newFavArray = newFavorites.map((favorite) => ({
+      name: favorite.name,
+      image: favorite.image,
+      breed: favorite.breed,
+      age: favorite.age
+    }));
+
     await updateDoc(docRef, {
-      favorites: newFavorites
+      favorites: newFavArray
     });
     return Promise.resolve(true);
   } catch (error) {

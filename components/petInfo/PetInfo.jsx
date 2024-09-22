@@ -8,9 +8,16 @@ import {
   updateUserFavorites
 } from "../../services/firebaseServices";
 
-export default function PetInfo({ name, image }) {
+export default function PetInfo({ image, name, age, breed }) {
   const [favorites, setFavorites] = useState([]);
   const { email } = userInfo;
+
+  const petData = {
+    image: image,
+    name: name,
+    age: age,
+    breed: breed
+  };
 
   useEffect(() => {
     const getFavorites = async (email) => {
@@ -20,8 +27,8 @@ export default function PetInfo({ name, image }) {
     getFavorites(email);
   }, [email]);
 
-  const handlePressAddFav = async (email, name, favorites) => {
-    const newFavorites = [...favorites, name];
+  const handlePressAddFav = async (email, favorites, petData) => {
+    const newFavorites = [...favorites, petData];
     try {
       setFavorites(newFavorites);
       await updateUserFavorites({ email, newFavorites });
@@ -31,7 +38,7 @@ export default function PetInfo({ name, image }) {
   };
 
   const handlePressRemoveFav = async (email, name, favorites) => {
-    const newFavorites = favorites.filter((favorite) => favorite !== name);    
+    const newFavorites = favorites.filter((favorite) => favorite.name !== name);
     try {
       setFavorites(newFavorites);
       await updateUserFavorites({ email, newFavorites });
@@ -40,6 +47,7 @@ export default function PetInfo({ name, image }) {
     }
   };
 
+  console.log("FAVORITES: ", favorites);
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: image }} />
@@ -48,14 +56,16 @@ export default function PetInfo({ name, image }) {
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.address}>552 N tryon Street 28155</Text>
         </View>
-        {favorites?.includes(name) ? (
+        {favorites?.some((favorite) => favorite.name === name) ? (
           <Pressable
             onPress={() => handlePressRemoveFav(email, name, favorites)}
           >
             <Ionicons name="heart" size={30} color="red" />
           </Pressable>
         ) : (
-          <Pressable onPress={() => handlePressAddFav(email, name, favorites)}>
+          <Pressable
+            onPress={() => handlePressAddFav(email, favorites, petData)}
+          >
             <Ionicons name="heart-outline" size={30} color="black" />
           </Pressable>
         )}
