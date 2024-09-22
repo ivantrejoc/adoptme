@@ -30,6 +30,16 @@ export default function PetInfo({ name, image }) {
     }
   };
 
+  const handlePressRemoveFav = async (email, name, favorites) => {
+    const newFavorites = favorites.filter((favorite) => favorite !== name);    
+    try {
+      setFavorites(newFavorites);
+      await updateUserFavorites({ email, newFavorites });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: image }} />
@@ -39,7 +49,9 @@ export default function PetInfo({ name, image }) {
           <Text style={styles.address}>552 N tryon Street 28155</Text>
         </View>
         {favorites?.includes(name) ? (
-          <Pressable>
+          <Pressable
+            onPress={() => handlePressRemoveFav(email, name, favorites)}
+          >
             <Ionicons name="heart" size={30} color="red" />
           </Pressable>
         ) : (
