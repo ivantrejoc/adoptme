@@ -1,4 +1,12 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  updateDoc,
+  where
+} from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
 export const getSliders = async () => {
@@ -37,7 +45,7 @@ export const getCategories = async () => {
 
 export const getPetsByCategory = async (category) => {
   try {
-    const queryPets = await query(
+    const queryPets = query(
       collection(db, "pets"),
       where("category", "==", category)
     );
@@ -53,5 +61,49 @@ export const getPetsByCategory = async (category) => {
   } catch (error) {
     console.error(error);
     return error.message;
+  }
+};
+
+export const getUserFavorites = async (email) => {
+  try {
+    const queryFavorites = query(
+      collection(db, "userFavPets"),
+      where("email", "==", email)
+    );
+    const querySnapshot = await getDocs(queryFavorites);
+    if (!querySnapshot) {
+      throw new Error("Something went wrong", error);
+    }
+    const document = querySnapshot.docs[0];
+    const docData = document.data();
+    const userFavorites = docData.favorites;
+    return userFavorites;
+  } catch (error) {
+    console.error(error);
+    return error.message;
+  }
+};
+
+export const updateUserFavorites = async (data) => {
+  try {
+    const { email, newFavorites } = data;
+
+    const queryData = query(
+      collection(db, "userFavPets"),
+      where("email", "==", email)
+    );
+    const querySnapshot = await getDocs(queryData);
+    if (!querySnapshot) {
+      throw new Error("Document not found");
+    }
+    const docRef = querySnapshot.docs[0].ref;
+
+    await updateDoc(docRef, {
+      favorites: newFavorites
+    });
+    return Promise.resolve(true);
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error.message);
   }
 };

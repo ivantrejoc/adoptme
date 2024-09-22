@@ -1,9 +1,35 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import colors from "../../constants/colors";
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Ionicons from "@expo/vector-icons/Ionicons";
+import userInfo from "../../utils/userInfo";
+import {
+  getUserFavorites,
+  updateUserFavorites
+} from "../../services/firebaseServices";
 
+export default function PetInfo({ name, image }) {
+  const [favorites, setFavorites] = useState([]);
+  const { email } = userInfo;
 
-export default function PetInfo({ name, age, breed, image }) {
+  useEffect(() => {
+    const getFavorites = async (email) => {
+      const userFavorites = await getUserFavorites(email);
+      setFavorites(userFavorites);
+    };
+    getFavorites(email);
+  }, [email]);
+
+  const handlePressAddFav = async (email, name, favorites) => {
+    const newFavorites = [...favorites, name];
+    try {
+      setFavorites(newFavorites);
+      await updateUserFavorites({ email, newFavorites });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: image }} />
@@ -12,15 +38,21 @@ export default function PetInfo({ name, age, breed, image }) {
           <Text style={styles.name}>{name}</Text>
           <Text style={styles.address}>552 N tryon Street 28155</Text>
         </View>
-        <Ionicons name="heart-outline" size={30} color="black" />
+        {favorites?.includes(name) ? (
+          <Pressable>
+            <Ionicons name="heart" size={30} color="red" />
+          </Pressable>
+        ) : (
+          <Pressable onPress={() => handlePressAddFav(email, name, favorites)}>
+            <Ionicons name="heart-outline" size={30} color="black" />
+          </Pressable>
+        )}
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    
-  },
+  container: {},
   image: {
     width: "100%",
     height: 400,
@@ -32,14 +64,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between"
   },
-  dataCont:{},
+  dataCont: {},
   name: {
     fontFamily: "lato",
     fontWeight: "700",
     fontSize: 27
   },
   address: {
-    fontFamily: "lato",    
+    fontFamily: "lato",
     fontSize: 16,
     color: colors.GRAY
   }
