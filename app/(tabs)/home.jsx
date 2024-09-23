@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { Link } from "expo-router";
 import HomeHeader from "../../components/homeHeader/HomeHeader";
 import Slider from "../../components/slider/Slider";
 import PetListByCategory from "../../components/petListByCategory/PetListByCategory";
@@ -11,10 +12,18 @@ export default function home() {
       <HomeHeader />
       <Slider />
       <PetListByCategory />
-      <TouchableOpacity style={styles.newPetBtn}>
-        <MaterialIcons name="pets" size={24} color={colors.PRIMARY} />
-        <Text style={styles.btnText}>Add New Pet</Text>
-      </TouchableOpacity>
+
+      <Link href={"/create-new-pet"} style={styles.link}>
+        <View style={styles.iconCont}>
+          <MaterialIcons
+            style={styles.icon}
+            name="pets"
+            size={24}
+            color={colors.PRIMARY}
+          />
+          <Text style={styles.btnText}>Add New Pet</Text>
+        </View>
+      </Link>
     </View>
   );
 }
@@ -25,23 +34,32 @@ const styles = StyleSheet.create({
     paddingVertical: 40,
     paddingHorizontal: 20
   },
-  newPetBtn: {
+  link: {
+    width: "100%",
     flexDirection: "row",
     gap: 10,
     padding: 20,
-    marginTop: 55,
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    marginTop: 55,
     borderWidth: 1,
     backgroundColor: colors.LIGHT_PRIMARY,
     borderColor: colors.PRIMARY,
     borderRadius: 15,
     borderStyle: "dashed"
   },
+  iconCont: {
+    flexDirection: "row",
+    gap: 10,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   btnText: {
     fontFamily: "lato",
     fontWeight: "700",
     fontSize: 18,
-    color: colors.PRIMARY
+    color: colors.PRIMARY,
+    textAlign: "center"
   }
 });

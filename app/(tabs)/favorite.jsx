@@ -58,12 +58,13 @@ const styles = StyleSheet.create({
   },
   flatList: {
     marginTop: 20,
+    paddingHorizontal: 15,
     alignItems: "flex-start",
-    justifyContent: "center"
+    justifyContent: "space-between"
   },
   petCardCont: {
-    paddingHorizontal: 17,
-    paddingVertical: 15,
+    paddingHorizontal: 0,
+    paddingVertical: 10,
     justifyContent: "center",
     alignItems: "center"
   }
