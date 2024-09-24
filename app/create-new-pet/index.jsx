@@ -7,17 +7,23 @@ import {
   Image,
   TextInput,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Pressable
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import colors from "../../constants/colors";
 import { getCategories } from "../../services/firebaseServices";
 import { Picker } from "@react-native-picker/picker";
 
 export default function CreateNewPet() {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    category: "Dogs",
+    gender: "Male"
+  });
   const [gender, setGender] = useState();
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState();
+  const [image, setImage] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -38,21 +44,38 @@ export default function CreateNewPet() {
     }));
   };
 
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
+    });
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
   const onSubmit = () => {
     console.log("FORM DATA ON SUBMIT: ", formData);
   };
 
-  // console.log("CATEGORIES: ", categories);
-
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.title}> Add New Pet for Adoption</Text>
-      <View style={styles.imageCont}>
-        <Image
-          style={styles.image}
-          source={require("../../assets/images/paw-transparent.png")}
-        />
-      </View>
+      <Pressable style={styles.imageCont} onPress={pickImage}>
+        {!image ? (
+          <Image
+            style={styles.image}
+            source={require("../../assets/images/paw-transparent.png")}
+          />
+        ) : (
+          <View style={{  }}>
+            <Image style={styles.imageFill} source={{ uri: image }} />
+          </View>
+        )}
+      </Pressable>
       <View style={styles.inputCont}>
         <Text style={styles.label}>Pet Name *</Text>
         <TextInput
@@ -74,6 +97,7 @@ export default function CreateNewPet() {
         >
           {categories?.map((category, index) => (
             <Picker.Item
+              style={styles.input}
               label={category?.name}
               value={category?.name}
               key={index}
@@ -155,7 +179,9 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   },
   imageCont: {
+    // backgroundColor: "cyan",
     width: 100,
+    height: 100,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 15,
@@ -169,6 +195,12 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     objectFit: "contain"
+  },
+  imageFill: {
+    width: 100,
+    height: 100,
+    objectFit: "cover",
+    borderRadius: 15,
   },
   inputCont: {
     marginVertical: 5

@@ -20,14 +20,28 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router"],
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow $(adoptme) to access your photos",
+          "cameraPermission": "Allow $(adoptme) to access your camera",
+          "mediaLibraryPermission": "Allow $(adoptme) to access your media library",
+          "microphonePermission": "Allow $(adoptme) to access your microphone"
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },
@@ -35,6 +49,17 @@
       "dev": true,
       "minify": false,
       "urlType": "tunnel"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ca4646a9-68a0-4059-b9d4-8ee5dd831b4a"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ca4646a9-68a0-4059-b9d4-8ee5dd831b4a"
     }
   }
 }
