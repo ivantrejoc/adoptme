@@ -1,4 +1,5 @@
 import {
+  addDoc,
   collection,
   doc,
   getDoc,
@@ -10,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
-export const setNewPet = async (data) =>{
+export const setNewPet = async (data) => {
   try {
     const newPetRef = doc(collection(db, "pets"));
     await setDoc(newPetRef, data);
@@ -18,8 +19,7 @@ export const setNewPet = async (data) =>{
   } catch (error) {
     throw new Error(`Error creating new pet: ${error.message}`);
   }
-}
-
+};
 
 export const getSliders = async () => {
   try {
@@ -124,5 +124,69 @@ export const updateUserFavorites = async (data) => {
   } catch (error) {
     console.error(error);
     return Promise.reject(error.message);
+  }
+};
+
+export const createNewChat = async (userData, ownerData) => {
+  const userEmail = userData.email;
+  const ownerEmail = ownerData.email;
+  const userName = userData.name;
+  const ownerName = ownerData.name;
+  const userImageUrl = userData.imageUrl;
+  const ownerImageUrl = ownerData.imageUrl;
+  const docId1 = `${userEmail}_${ownerEmail}`;
+  const docId2 = `${ownerEmail}_${userEmail}`;
+  const queryData = query(
+    collection(db, "chats"),
+    where("id", "in", [docId1, docId2])
+  );
+
+  const querySnapshot = await getDocs(queryData);
+  const documents = querySnapshot.docs.map((doc) => doc.data());
+  const document = documents[0];
+
+  if (!documents.length) {
+    const chatData = {
+      id: docId1,
+      users: [
+        {
+          email: userEmail,
+          name: userName,
+          imageUrl: userImageUrl
+        },
+        {
+          email: ownerEmail,
+          name: ownerName,
+          imageUrl: ownerImageUrl
+        }
+      ]
+    };
+    try {
+      const chatRef = doc(db, "chats", docId1);
+      await setDoc(chatRef, chatData);
+      const newDocument = await getDoc(chatRef);
+      const newDocData = newDocument.data();
+      return newDocData;
+    } catch (error) {
+      console.error(`Error creating chat: ${error}`);
+      return Promise.reject(error.message);
+    }
+  } else {
+    return document;
+  }
+};
+
+export const getDocumentDetails = async (id) => {
+  try {
+    const docRef = doc(db, "chats", id);
+    const docSnapshot = await getDoc(docRef);
+    if (!docSnapshot) {
+      throw new Error("Something went wrong", error);
+    }
+    const document = docSnapshot.data();
+    return document;
+  } catch (error) {
+    console.error(error);
+    return error.message;
   }
 };

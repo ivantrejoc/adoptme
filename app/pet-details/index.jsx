@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useLocalSearchParams, useNavigation } from "expo-router";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import {
   StyleSheet,
   ScrollView,
@@ -7,6 +7,8 @@ import {
   View,
   TouchableOpacity
 } from "react-native";
+import { createNewChat } from "../../services/firebaseServices";
+import userInfo from "../../utils/userInfo";
 import PetInfo from "../../components/petInfo/PetInfo";
 import PetSubInfo from "../../components/petInfo/PetSubInfo";
 import AboutPet from "../../components/petInfo/AboutPet";
@@ -14,6 +16,7 @@ import colors from "../../constants/colors";
 
 export default function PetDetails() {
   const navigation = useNavigation();
+  const router = useRouter();
   const searchParams = useLocalSearchParams();
   const {
     about,
@@ -21,7 +24,6 @@ export default function PetDetails() {
     age,
     breed,
     gender,
-    category,
     email,
     name,
     owner,
@@ -36,17 +38,58 @@ export default function PetDetails() {
       headerTitle: ""
     });
   }, []);
-  
+
+  const handlePressStartChat = async () => {
+    const userData = {
+      name: userInfo.name,
+      email: userInfo.email,
+      imageUrl: userInfo.avatar
+    };
+
+    const ownerData = {
+      name: owner,
+      email: email,
+      imageUrl: ownerImageUrl
+    };
+    try {
+      const response = await createNewChat(userData, ownerData);
+      router.push({
+        pathname: "/chat",
+        params: {
+          chatId: response.id
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      return error.message;
+    }
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <PetInfo image={image} name={name} age={age} breed={breed} address={address} />
+        <PetInfo
+          image={image}
+          name={name}
+          age={age}
+          breed={breed}
+          address={address}
+        />
         <PetSubInfo age={age} breed={breed} gender={gender} weight={weight} />
-        <AboutPet name={name} about={about} email={email} owner={owner} ownerImage={ownerImageUrl} />
+        <AboutPet
+          name={name}
+          about={about}
+          email={email}
+          owner={owner}
+          ownerImage={ownerImageUrl}
+        />
         <View style={styles.block}></View>
       </ScrollView>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.adoptButton}>
+        <TouchableOpacity
+          style={styles.adoptButton}
+          onPress={handlePressStartChat}
+        >
           <Text style={styles.textBtn}>Adopt Me</Text>
         </TouchableOpacity>
       </View>
