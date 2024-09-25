@@ -36,11 +36,11 @@ export default function PetListByCategory() {
         onRefresh={() => fetchFilteredPets(categorySelected)}
         renderItem={({ item }) => (
           <PetCard
-            key={item.id}
-            name={item.name}
-            age={item.age}
-            image={item.imageUrl}
-            breed={item.breed}
+            key={item?.id}
+            name={item?.name}
+            age={item?.age}
+            image={item?.imageUrl}
+            breed={item?.breed}
           />
         )}
       />

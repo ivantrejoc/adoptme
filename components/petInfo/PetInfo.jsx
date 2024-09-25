@@ -36,7 +36,6 @@ export default function PetInfo({ image, name, age, breed }) {
       console.error(error);
     }
   };
-
   const handlePressRemoveFav = async (email, name, favorites) => {
     const newFavorites = favorites.filter((favorite) => favorite.name !== name);
     try {
@@ -46,10 +45,16 @@ export default function PetInfo({ image, name, age, breed }) {
       console.error(error);
     }
   };
-  
+
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={{ uri: image }} />
+      <Image
+        style={styles.image}
+        source={{
+          uri: image,
+          cache: "reload"
+        }}
+      />
       <View style={styles.infoCont}>
         <View style={styles.dataCont}>
           <Text style={styles.name}>{name}</Text>

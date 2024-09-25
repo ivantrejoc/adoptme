@@ -1,4 +1,4 @@
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -8,11 +8,13 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity,
-  Pressable
+  Pressable,
+  ToastAndroid
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import colors from "../../constants/colors";
-import { getCategories } from "../../services/firebaseServices";
+import { getCategories, setNewPet } from "../../services/firebaseServices";
+import { uploadImage } from "../../services/cloudStorageServices";
 import { Picker } from "@react-native-picker/picker";
 
 export default function CreateNewPet() {
@@ -25,7 +27,7 @@ export default function CreateNewPet() {
   const [selectedCategory, setSelectedCategory] = useState();
   const [image, setImage] = useState(null);
   const navigation = useNavigation();
-
+  const router = useRouter();
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Add New Pet"
@@ -57,8 +59,46 @@ export default function CreateNewPet() {
     }
   };
 
-  const onSubmit = () => {
-    console.log("FORM DATA ON SUBMIT: ", formData);
+  const onSubmit = async () => {
+    if (Object.keys(formData).length !== 8) {
+      ToastAndroid.show("Complete all the fields", ToastAndroid.SHORT);
+      return;
+    }
+    try {
+      const imageURL = await uploadImage(image);
+
+      const data = {
+        name: formData.name,
+        age: formData.age,
+        weight: formData.weight,
+        breed: formData.breed,
+        gender: formData.gender,
+        category: formData.category,
+        address: formData.address,
+        about: formData.about,
+        imageUrl: imageURL
+      };
+      const result = await setNewPet(data);
+      if (result) {
+        ToastAndroid.show("Pet added successfully", ToastAndroid.SHORT);
+        setFormData({
+          category: "Dogs",
+          gender: "Male",
+          name: "",
+          age: "",
+          weight: "",
+          breed: "",
+          address: "",
+          about: ""
+        });
+        setImage(null);
+        setSelectedCategory(null);
+        setGender(null);
+        router.replace("/(tabs)/home")
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -71,7 +111,7 @@ export default function CreateNewPet() {
             source={require("../../assets/images/paw-transparent.png")}
           />
         ) : (
-          <View style={{  }}>
+          <View style={{}}>
             <Image style={styles.imageFill} source={{ uri: image }} />
           </View>
         )}
@@ -118,6 +158,7 @@ export default function CreateNewPet() {
         <TextInput
           style={styles.input}
           placeholder="4"
+          keyboardType="numeric"
           onChangeText={(value) => handleInputChange("age", value)}
         />
       </View>
@@ -125,7 +166,8 @@ export default function CreateNewPet() {
         <Text style={styles.label}>Weight *</Text>
         <TextInput
           style={styles.input}
-          placeholder="3.5 lbs..."
+          placeholder="3.5"
+          keyboardType="numeric"
           onChangeText={(value) => handleInputChange("weight", value)}
         />
       </View>
@@ -179,7 +221,6 @@ const styles = StyleSheet.create({
     fontWeight: "700"
   },
   imageCont: {
-    // backgroundColor: "cyan",
     width: 100,
     height: 100,
     alignItems: "center",
@@ -200,7 +241,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     objectFit: "cover",
-    borderRadius: 15,
+    borderRadius: 15
   },
   inputCont: {
     marginVertical: 5

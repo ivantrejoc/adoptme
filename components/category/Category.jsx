@@ -31,7 +31,7 @@ export default function Category({ onCategorySelected }) {
     setIsSelected(category);
     onCategorySelected(category);
   };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Category</Text>

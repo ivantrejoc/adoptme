@@ -4,10 +4,22 @@ import {
   getDoc,
   getDocs,
   query,
+  setDoc,
   updateDoc,
   where
 } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
+
+export const setNewPet = async (data) =>{
+  try {
+    const newPetRef = doc(collection(db, "pets"));
+    await setDoc(newPetRef, data);
+    return { id: newPetRef.id, ...data };
+  } catch (error) {
+    throw new Error(`Error creating new pet: ${error.message}`);
+  }
+}
+
 
 export const getSliders = async () => {
   try {

@@ -23,7 +23,7 @@ export default function PetDetails() {
       headerTitle: ""
     });
   }, []);
-
+  // console.log("IMAGE INTO INDEX: ", image);
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>

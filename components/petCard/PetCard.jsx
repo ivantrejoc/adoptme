@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 
 export default function PetCard({ name, age, breed, image }) {
   const router = useRouter();
+  const encodedImage = encodeURIComponent(image)
 
   const handlePressCard = () => {
     router.push({
@@ -12,7 +13,7 @@ export default function PetCard({ name, age, breed, image }) {
         name,
         age,
         breed,
-        image
+        image: encodedImage
       }
     });
   };
