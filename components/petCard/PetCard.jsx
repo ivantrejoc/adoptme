@@ -2,17 +2,40 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import colors from "../../constants/colors";
 import { useRouter } from "expo-router";
 
-export default function PetCard({ name, age, breed, image }) {
+export default function PetCard({ details }) {
   const router = useRouter();
-  const encodedImage = encodeURIComponent(image)
 
+  const {
+    about,
+    address,
+    age,
+    breed,
+    gender,
+    category,
+    email,
+    imageUrl,
+    name,
+    owner,
+    ownerImageUrl,
+    weight
+  } = details;
+  const encodedImage = encodeURIComponent(imageUrl);
+  
   const handlePressCard = () => {
     router.push({
       pathname: "pet-details",
       params: {
-        name,
+        about,
+        address,
         age,
         breed,
+        gender,
+        category,
+        email,
+        name,
+        owner,
+        ownerImageUrl,
+        weight,
         image: encodedImage
       }
     });
@@ -20,7 +43,7 @@ export default function PetCard({ name, age, breed, image }) {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handlePressCard}>
-      <Image style={styles.image} source={{ uri: image }} />
+      <Image style={styles.image} source={{ uri: imageUrl }} />
       <Text style={styles.name}>{name}</Text>
       <View style={styles.dataCont}>
         <Text style={styles.breed}>{breed}</Text>

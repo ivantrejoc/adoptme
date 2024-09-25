@@ -2,18 +2,18 @@ import { StyleSheet, Text, Image, View } from "react-native";
 import colors from "../../constants/colors";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-export default function OwnerInfo() {
+export default function OwnerInfo({email, owner, ownerImage}) {
   return (
     <View style={styles.container}>
       <View style={styles.infoCont}>
         <Image
           style={styles.avatar}
           source={{
-            uri: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZhdGFyfGVufDB8fDB8fHww"
+            uri: ownerImage
           }}
         />
         <View style={styles.ownerInfoCont}>
-          <Text style={styles.name}>Marilyn Harrison</Text>
+          <Text style={styles.name}>{owner}</Text>
           <Text style={styles.legend}>Pet Owner</Text>
         </View>
       </View>

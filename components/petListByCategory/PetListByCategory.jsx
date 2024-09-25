@@ -24,7 +24,7 @@ export default function PetListByCategory() {
   const handleCategorySelected = (category) => {
     setCategorySelected(category);
   };
-
+  
   return (
     <View style={styles.container}>
       <Category onCategorySelected={handleCategorySelected} />
@@ -34,15 +34,7 @@ export default function PetListByCategory() {
         horizontal={true}
         refreshing={loader}
         onRefresh={() => fetchFilteredPets(categorySelected)}
-        renderItem={({ item }) => (
-          <PetCard
-            key={item?.id}
-            name={item?.name}
-            age={item?.age}
-            image={item?.imageUrl}
-            breed={item?.breed}
-          />
-        )}
+        renderItem={({ item }) => <PetCard key={item?.id} details={item} />}
       />
     </View>
   );

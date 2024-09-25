@@ -3,7 +3,7 @@ import colors from "../../constants/colors";
 import { StyleSheet, Text, View, Pressable } from "react-native";
 import OwnerInfo from "./OwnerInfo";
 
-export default function AboutPet({ name }) {
+export default function AboutPet({ name, about, email, owner, ownerImage }) {
   const [readMore, SetReadMore] = useState(true);
 
   const handleReadMorePress = () => {
@@ -18,13 +18,7 @@ export default function AboutPet({ name }) {
     <View style={styles.container}>
       <Text style={styles.title}>About {name}</Text>
       <Text numberOfLines={readMore ? 3 : 20} style={styles.paragraph}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        {about}
       </Text>
 
       {readMore && (
@@ -37,7 +31,7 @@ export default function AboutPet({ name }) {
           <Text style={styles.textBtn}>Read Less</Text>
         </Pressable>
       )}
-      <OwnerInfo />
+      <OwnerInfo email={email} owner={owner} ownerImage={ownerImage} />
     </View>
   );
 }

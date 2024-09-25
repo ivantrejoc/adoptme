@@ -8,7 +8,7 @@ import {
   updateUserFavorites
 } from "../../services/firebaseServices";
 
-export default function PetInfo({ image, name, age, breed }) {
+export default function PetInfo({ image, name, age, breed, address }) {
   const [favorites, setFavorites] = useState([]);
   const { email } = userInfo;
 
@@ -58,7 +58,7 @@ export default function PetInfo({ image, name, age, breed }) {
       <View style={styles.infoCont}>
         <View style={styles.dataCont}>
           <Text style={styles.name}>{name}</Text>
-          <Text style={styles.address}>552 N tryon Street 28155</Text>
+          <Text style={styles.address}>{address}</Text>
         </View>
         {favorites?.some((favorite) => favorite.name === name) ? (
           <Pressable

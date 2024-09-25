@@ -4,7 +4,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import colors from "../../constants/colors";
 
-export default function PetSubInfo({ breed, age }) {
+export default function PetSubInfo({ breed, age, gender, weight }) {
   return (
     <View style={styles.container}>
       <View style={styles.rowContainer}>
@@ -37,8 +37,8 @@ export default function PetSubInfo({ breed, age }) {
             <FontAwesome name="intersex" size={24} color={colors.PRIMARY} />
           </View>
           <View style={styles.legendCont}>
-            <Text style={styles.legend}>Sex</Text>
-            <Text style={styles.data}>Female</Text>
+            <Text style={styles.legend}>Gender</Text>
+            <Text style={styles.data}>{gender}</Text>
           </View>
         </View>
 
@@ -52,7 +52,7 @@ export default function PetSubInfo({ breed, age }) {
           </View>
           <View style={styles.legendCont}>
             <Text style={styles.legend}>Weight</Text>
-            <Text style={styles.data}>60 lb.</Text>
+            <Text style={styles.data}>{weight} lb.</Text>
           </View>
         </View>
       </View>

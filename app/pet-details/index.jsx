@@ -15,7 +15,20 @@ import colors from "../../constants/colors";
 export default function PetDetails() {
   const navigation = useNavigation();
   const searchParams = useLocalSearchParams();
-  const { name, age, breed, image } = searchParams;
+  const {
+    about,
+    address,
+    age,
+    breed,
+    gender,
+    category,
+    email,
+    name,
+    owner,
+    ownerImageUrl,
+    weight,
+    image
+  } = searchParams;
 
   useEffect(() => {
     navigation.setOptions({
@@ -23,13 +36,13 @@ export default function PetDetails() {
       headerTitle: ""
     });
   }, []);
-  // console.log("IMAGE INTO INDEX: ", image);
+  
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <PetInfo image={image} name={name} age={age} breed={breed} />
-        <PetSubInfo age={age} breed={breed} />
-        <AboutPet name={name} />
+        <PetInfo image={image} name={name} age={age} breed={breed} address={address} />
+        <PetSubInfo age={age} breed={breed} gender={gender} weight={weight} />
+        <AboutPet name={name} about={about} email={email} owner={owner} ownerImage={ownerImageUrl} />
         <View style={styles.block}></View>
       </ScrollView>
       <View style={styles.buttonContainer}>
