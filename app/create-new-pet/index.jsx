@@ -16,8 +16,10 @@ import colors from "../../constants/colors";
 import { getCategories, setNewPet } from "../../services/firebaseServices";
 import { uploadImage } from "../../services/cloudStorageServices";
 import { Picker } from "@react-native-picker/picker";
+import userInfo from "../../utils/userInfo";
 
 export default function CreateNewPet() {
+  const { avatar, email, name } = userInfo;
   const [formData, setFormData] = useState({
     category: "Dogs",
     gender: "Male"
@@ -28,6 +30,7 @@ export default function CreateNewPet() {
   const [image, setImage] = useState(null);
   const navigation = useNavigation();
   const router = useRouter();
+
   useEffect(() => {
     navigation.setOptions({
       headerTitle: "Add New Pet"
@@ -68,7 +71,7 @@ export default function CreateNewPet() {
       const imageURL = await uploadImage(image);
 
       const data = {
-        name: formData.name,
+        name: formData.petName,
         age: formData.age,
         weight: formData.weight,
         breed: formData.breed,
@@ -76,8 +79,12 @@ export default function CreateNewPet() {
         category: formData.category,
         address: formData.address,
         about: formData.about,
-        imageUrl: imageURL
+        imageUrl: imageURL,
+        owner: name,
+        email: email,
+        ownerImageUrl: avatar
       };
+
       const result = await setNewPet(data);
       if (result) {
         ToastAndroid.show("Pet added successfully", ToastAndroid.SHORT);
@@ -89,12 +96,15 @@ export default function CreateNewPet() {
           weight: "",
           breed: "",
           address: "",
-          about: ""
+          about: "",
+          owner: formData.owner,
+          email: formData.email,
+          ownerImageUrl: formData.ownerImageUrl
         });
         setImage(null);
         setSelectedCategory(null);
         setGender(null);
-        router.replace("/(tabs)/home")
+        router.replace("/(tabs)/home");
       }
     } catch (error) {
       console.error(error);
@@ -121,7 +131,7 @@ export default function CreateNewPet() {
         <TextInput
           style={styles.input}
           placeholder="Rocky..."
-          onChangeText={(value) => handleInputChange("name", value)}
+          onChangeText={(value) => handleInputChange("petName", value)}
         />
       </View>
       <View style={styles.inputCont}>
