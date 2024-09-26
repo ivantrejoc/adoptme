@@ -1,23 +1,36 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { getDocumentDetails } from "../../services/firebaseServices";
+import {
+  getChatDetails,
+  setNewMessage,
+  getChatMessages
+} from "../../services/firebaseServices";
 import { useEffect, useState } from "react";
+import { GiftedChat } from "react-native-gifted-chat";
 import userInfo from "../../utils/userInfo";
+import moment from "moment";
 
 export default function Chat() {
   const [chat, setChat] = useState(null);
+  const [messages, setMessages] = useState([]);
   const searchParams = useLocalSearchParams();
   const { chatId } = searchParams;
-  const { email } = userInfo;
+  const { email, name, avatar } = userInfo;
   const navigation = useNavigation();
 
   useEffect(() => {
     const fetchChat = async () => {
-      const details = await getDocumentDetails(chatId);
+      const details = await getChatDetails(chatId);
       setChat(details);
     };
 
+    const fetchMessages = async () => {
+      const messagesData = await getChatMessages(chatId);
+      setMessages(messagesData);
+    };
+
     fetchChat();
+    fetchMessages();
   }, [chatId]);
 
   useEffect(() => {
@@ -30,10 +43,31 @@ export default function Chat() {
     }
   });
 
+  const onSend = async (newMessage) => {
+    setMessages((previousMessage) =>
+      GiftedChat.append(previousMessage, newMessage)
+    );
+
+    const formatedDate = moment().format("MM-DD-YYYY HH:mm:ss");
+    const message = {
+      ...newMessage[0],
+      createdAt: formatedDate
+    };
+    console.log("MESSAGE: ", message);
+    await setNewMessage(chatId, message);
+  };
+
   return (
-    <View>
-      <Text> Chat</Text>
-    </View>
+    <GiftedChat
+      messages={messages}
+      onSend={(messages) => onSend(messages)}
+      showUserAvatar={true}
+      user={{
+        _id: email,
+        name: name,
+        avatar: avatar
+      }}
+    />
   );
 }
 const styles = StyleSheet.create({});

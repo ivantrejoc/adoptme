@@ -176,7 +176,7 @@ export const createNewChat = async (userData, ownerData) => {
   }
 };
 
-export const getDocumentDetails = async (id) => {
+export const getChatDetails = async (id) => {
   try {
     const docRef = doc(db, "chats", id);
     const docSnapshot = await getDoc(docRef);
@@ -188,5 +188,32 @@ export const getDocumentDetails = async (id) => {
   } catch (error) {
     console.error(error);
     return error.message;
+  }
+};
+
+export const getChatMessages = async (chatId) => {
+  try {
+    const messagesRef = collection(db, "chats", chatId, "messages");
+    const docsSnapshot = await getDocs(messagesRef);
+    const messages = docsSnapshot.docs.map((doc) => doc.data());
+    return messages;
+  } catch (error) {
+    console.error(error);
+    return error.message;
+  }
+};
+
+export const setNewMessage = async (chatId, message) => {
+  try {
+    const messagesRef = collection(db, "chats", chatId, "messages");
+    const setMessage = await addDoc(messagesRef, message);
+    if (setMessage.id) {
+      return Promise.resolve("Message saved: ", setMessage.id);
+    } else {
+      return Promise.reject("Error saving message");
+    }
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error.message);
   }
 };
