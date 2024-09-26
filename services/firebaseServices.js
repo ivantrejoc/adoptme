@@ -83,8 +83,8 @@ export const getUserFavorites = async (email) => {
       where("email", "==", email)
     );
     const querySnapshot = await getDocs(queryFavorites);
-    if (!querySnapshot) {
-      throw new Error("Something went wrong", error);
+    if (querySnapshot.docs.length === 0) {
+      return [];
     }
     const document = querySnapshot.docs[0];
     const docData = document.data();
@@ -98,28 +98,42 @@ export const getUserFavorites = async (email) => {
 
 export const updateUserFavorites = async (data) => {
   try {
-    const { email, newFavorites } = data;
+    const { userEmail, newFavorites } = data;
 
     const queryData = query(
       collection(db, "userFavPets"),
-      where("email", "==", email)
+      where("email", "==", userEmail)
     );
-    const querySnapshot = await getDocs(queryData);
-    if (!querySnapshot) {
-      throw new Error("Document not found");
-    }
-    const docRef = querySnapshot.docs[0].ref;
 
     const newFavArray = newFavorites.map((favorite) => ({
-      name: favorite.name,
-      image: favorite.image,
+      about: favorite.about,
+      address: favorite.address,
+      age: favorite.age,
       breed: favorite.breed,
-      age: favorite.age
+      gender: favorite.gender,
+      category: favorite.category,
+      email: favorite.email,
+      image: favorite.image,
+      name: favorite.name,
+      owner: favorite.owner,
+      ownerImageUrl: favorite.ownerImageUrl,
+      weight: favorite.weight
     }));
 
-    await updateDoc(docRef, {
-      favorites: newFavArray
-    });
+    const querySnapshot = await getDocs(queryData);
+
+    if (querySnapshot.docs.length === 0) {
+      const docRef = doc(collection(db, "userFavPets"));
+      await setDoc(docRef, {
+        email: userEmail,
+        favorites: newFavArray
+      });
+    } else {
+      const docRef = querySnapshot.docs[0].ref;
+      await updateDoc(docRef, {
+        favorites: newFavArray
+      });
+    }
     return Promise.resolve(true);
   } catch (error) {
     console.error(error);
@@ -215,5 +229,20 @@ export const setNewMessage = async (chatId, message) => {
   } catch (error) {
     console.error(error);
     return Promise.reject(error.message);
+  }
+};
+
+export const getUserChats = async (userEmail) => {
+  try {
+    const userChatsQuery = query(
+      collection(db, "chats"),
+      where("users", "array-contains-any", [userEmail])
+    );
+    const userChatsSnapshot = await getDocs(userChatsQuery);
+    const userChats = userChatsSnapshot.docs.map((doc) => doc.data());
+    console.log("USER CHATS: ", userChats);
+    return userChats;
+  } catch (error) {
+    console.error(error);
   }
 };

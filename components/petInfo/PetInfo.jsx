@@ -8,43 +8,68 @@ import {
   updateUserFavorites
 } from "../../services/firebaseServices";
 
-export default function PetInfo({ image, name, age, breed, address }) {
+export default function PetInfo({ details }) {
   const [favorites, setFavorites] = useState([]);
-  const { email } = userInfo;
+  const userEmail = userInfo.email;
+
+  const {
+    about,
+    address,
+    age,
+    breed,
+    email,
+    gender,
+    category,
+    image,
+    name,
+    owner,
+    ownerImageUrl,
+    weight
+  } = details;
 
   const petData = {
-    image: image,
-    name: name,
-    age: age,
-    breed: breed
+    about,
+    address,
+    age,
+    breed,
+    gender,
+    category,
+    email,
+    image,
+    name,
+    owner,
+    ownerImageUrl,
+    weight
   };
 
   useEffect(() => {
-    const getFavorites = async (email) => {
-      const userFavorites = await getUserFavorites(email);
+    const getFavorites = async (userEmail) => {
+      const userFavorites = await getUserFavorites(userEmail);
       setFavorites(userFavorites);
     };
-    getFavorites(email);
-  }, [email]);
+    getFavorites(userEmail);
+  }, [userEmail]);
 
-  const handlePressAddFav = async (email, favorites, petData) => {
+  const handlePressAddFav = async (userEmail, favorites, petData) => {
     const newFavorites = [...favorites, petData];
     try {
       setFavorites(newFavorites);
-      await updateUserFavorites({ email, newFavorites });
+      await updateUserFavorites({ userEmail, newFavorites });
     } catch (error) {
       console.error(error);
     }
   };
-  const handlePressRemoveFav = async (email, name, favorites) => {
+  const handlePressRemoveFav = async (userEmail, name, favorites) => {
     const newFavorites = favorites.filter((favorite) => favorite.name !== name);
     try {
       setFavorites(newFavorites);
-      await updateUserFavorites({ email, newFavorites });
+      await updateUserFavorites({ userEmail, newFavorites });
     } catch (error) {
       console.error(error);
     }
   };
+
+  // console.log("FAVORITES: ", favorites);
 
   return (
     <View style={styles.container}>
@@ -62,13 +87,13 @@ export default function PetInfo({ image, name, age, breed, address }) {
         </View>
         {favorites?.some((favorite) => favorite.name === name) ? (
           <Pressable
-            onPress={() => handlePressRemoveFav(email, name, favorites)}
+            onPress={() => handlePressRemoveFav(userEmail, name, favorites)}
           >
             <Ionicons name="heart" size={30} color="red" />
           </Pressable>
         ) : (
           <Pressable
-            onPress={() => handlePressAddFav(email, favorites, petData)}
+            onPress={() => handlePressAddFav(userEmail, favorites, petData)}
           >
             <Ionicons name="heart-outline" size={30} color="black" />
           </Pressable>

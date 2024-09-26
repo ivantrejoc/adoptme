@@ -13,13 +13,13 @@ export default function PetCard({ details }) {
     gender,
     category,
     email,
-    imageUrl,
+    image,
     name,
     owner,
     ownerImageUrl,
     weight
   } = details;
-  const encodedImage = encodeURIComponent(imageUrl);
+  const encodedImage = encodeURIComponent(image);
   
   const handlePressCard = () => {
     router.push({
@@ -43,7 +43,7 @@ export default function PetCard({ details }) {
 
   return (
     <TouchableOpacity style={styles.container} onPress={handlePressCard}>
-      <Image style={styles.image} source={{ uri: imageUrl }} />
+      <Image style={styles.image} source={{ uri: image }} />
       <Text style={styles.name}>{name}</Text>
       <View style={styles.dataCont}>
         <Text style={styles.breed}>{breed}</Text>

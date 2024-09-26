@@ -33,12 +33,7 @@ export default function Favorites() {
         refreshing={loader}
         renderItem={({ item }) => (
           <View style={styles.petCardCont}>
-            <PetCard
-              name={item?.name}
-              age={item?.age}
-              breed={item?.breed}
-              image={item?.image}
-            />
+            <PetCard details={item} />
           </View>
         )}
       ></FlatList>

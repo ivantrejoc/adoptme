@@ -24,6 +24,7 @@ export default function PetDetails() {
     age,
     breed,
     gender,
+    category,
     email,
     name,
     owner,
@@ -31,6 +32,21 @@ export default function PetDetails() {
     weight,
     image
   } = searchParams;
+
+  const PetDetails = {
+    about,
+    address,
+    age,
+    breed,
+    gender,
+    category,
+    email,
+    name,
+    owner,
+    ownerImageUrl,
+    weight,
+    image
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,13 +84,7 @@ export default function PetDetails() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        <PetInfo
-          image={image}
-          name={name}
-          age={age}
-          breed={breed}
-          address={address}
-        />
+        <PetInfo details={PetDetails} />
         <PetSubInfo age={age} breed={breed} gender={gender} weight={weight} />
         <AboutPet
           name={name}
