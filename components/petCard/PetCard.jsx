@@ -19,8 +19,9 @@ export default function PetCard({ details }) {
     ownerImageUrl,
     weight
   } = details;
+
   const encodedImage = encodeURIComponent(imageUrl);
-  
+
   const handlePressCard = () => {
     router.push({
       pathname: "pet-details",

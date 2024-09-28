@@ -36,6 +36,12 @@ export default function Profile() {
     },
     {
       id: 4,
+      name: "User Posts",
+      icon: "bookmark",
+      route: "/../user-posts"
+    },
+    {
+      id: 5,
       name: "Logout",
       icon: "exit",
       route: "/"

@@ -7,6 +7,7 @@ import {
   query,
   setDoc,
   updateDoc,
+  deleteDoc,
   where
 } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
@@ -246,5 +247,35 @@ export const getUserChats = async (userEmail) => {
     return userChats;
   } catch (error) {
     console.error(error);
+    return error.message;
+  }
+};
+
+export const getUserPets = async (userEmail) => {
+  try {
+    const userPetsQuery = query(
+      collection(db, "pets"),
+      where("email", "==", userEmail)
+    );
+    const userPetsSnapshot = await getDocs(userPetsQuery);
+    const userPets = userPetsSnapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id
+    }));
+    return userPets;
+  } catch (error) {
+    console.error(error);
+    return error.message;
+  }
+};
+
+export const deleteUserPost = async (id) => {
+  try {
+    const postRef = doc(db, "pets", id);
+    await deleteDoc(postRef);
+    return Promise.resolve("Post deleted");
+  } catch (error) {
+    console.error(error.message);
+    return Promise.reject(error.message);
   }
 };

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "expo-router";
 import { View, FlatList, StyleSheet } from "react-native";
 import Category from "../category/Category";
 import PetCard from "../petCard/PetCard";
@@ -15,16 +16,17 @@ export default function PetListByCategory() {
     setLoader(false);
   };
 
-  useEffect(() => {
-    if (categorySelected) {
-      fetchFilteredPets(categorySelected);
-    }
-  }, [categorySelected]);
+  useFocusEffect(
+    useCallback(() => {
+      if (categorySelected) {
+        fetchFilteredPets(categorySelected);
+      }
+    }, [categorySelected])
+  );
 
   const handleCategorySelected = (category) => {
     setCategorySelected(category);
   };
-  
 
   return (
     <View style={styles.container}>
