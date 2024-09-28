@@ -15,7 +15,6 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const searchParams = useLocalSearchParams();
   const { chatId } = searchParams;
-  console.log("CHAT ID: ", chatId);
   const { email, name, avatar } = userInfo;
   const navigation = useNavigation();
 
