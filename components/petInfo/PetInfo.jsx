@@ -20,7 +20,7 @@ export default function PetInfo({ details }) {
     email,
     gender,
     category,
-    image,
+    imageUrl,
     name,
     owner,
     ownerImageUrl,
@@ -35,7 +35,7 @@ export default function PetInfo({ details }) {
     gender,
     category,
     email,
-    image,
+    imageUrl,
     name,
     owner,
     ownerImageUrl,
@@ -69,14 +69,12 @@ export default function PetInfo({ details }) {
     }
   };
 
-  // console.log("FAVORITES: ", favorites);
-
   return (
     <View style={styles.container}>
       <Image
         style={styles.image}
         source={{
-          uri: image,
+          uri: imageUrl,
           cache: "reload"
         }}
       />

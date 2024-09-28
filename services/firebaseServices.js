@@ -10,6 +10,7 @@ import {
   where
 } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
+import { createURL } from "expo-linking";
 
 export const setNewPet = async (data) => {
   try {
@@ -113,7 +114,7 @@ export const updateUserFavorites = async (data) => {
       gender: favorite.gender,
       category: favorite.category,
       email: favorite.email,
-      image: favorite.image,
+      imageUrl: favorite.imageUrl,
       name: favorite.name,
       owner: favorite.owner,
       ownerImageUrl: favorite.ownerImageUrl,
@@ -173,7 +174,8 @@ export const createNewChat = async (userData, ownerData) => {
           name: ownerName,
           imageUrl: ownerImageUrl
         }
-      ]
+      ],
+      userIds: [userEmail, ownerEmail]
     };
     try {
       const chatRef = doc(db, "chats", docId1);
@@ -236,11 +238,11 @@ export const getUserChats = async (userEmail) => {
   try {
     const userChatsQuery = query(
       collection(db, "chats"),
-      where("users", "array-contains-any", [userEmail])
+      where("userIds", "array-contains", userEmail)
     );
     const userChatsSnapshot = await getDocs(userChatsQuery);
     const userChats = userChatsSnapshot.docs.map((doc) => doc.data());
-    console.log("USER CHATS: ", userChats);
+
     return userChats;
   } catch (error) {
     console.error(error);

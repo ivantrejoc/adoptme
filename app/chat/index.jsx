@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import {
   getChatDetails,
@@ -15,6 +15,7 @@ export default function Chat() {
   const [messages, setMessages] = useState([]);
   const searchParams = useLocalSearchParams();
   const { chatId } = searchParams;
+  console.log("CHAT ID: ", chatId);
   const { email, name, avatar } = userInfo;
   const navigation = useNavigation();
 
@@ -53,7 +54,6 @@ export default function Chat() {
       ...newMessage[0],
       createdAt: formatedDate
     };
-    console.log("MESSAGE: ", message);
     await setNewMessage(chatId, message);
   };
 

@@ -25,6 +25,7 @@ export default function PetListByCategory() {
     setCategorySelected(category);
   };
   
+
   return (
     <View style={styles.container}>
       <Category onCategorySelected={handleCategorySelected} />

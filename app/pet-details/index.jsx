@@ -30,7 +30,7 @@ export default function PetDetails() {
     owner,
     ownerImageUrl,
     weight,
-    image
+    imageUrl
   } = searchParams;
 
   const PetDetails = {
@@ -45,7 +45,7 @@ export default function PetDetails() {
     owner,
     ownerImageUrl,
     weight,
-    image
+    imageUrl
   };
 
   useEffect(() => {
