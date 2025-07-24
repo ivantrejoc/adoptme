@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ivantrejodev.adoptme",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.ivantrejodev.adoptme",
@@ -55,9 +59,7 @@
         "projectId": "ca4646a9-68a0-4059-b9d4-8ee5dd831b4a"
       }
     },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
+    "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/ca4646a9-68a0-4059-b9d4-8ee5dd831b4a"
     }
